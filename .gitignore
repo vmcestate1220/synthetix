@@ -1,0 +1,42 @@
+# Python cache and virtualenv artifacts
+__pycache__/
+*.py[cod]
+*.so
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.DS_Store
+activations_debug.log
+
+# Build outputs
+build/
+dist/
+*.egg-info/
+
+# Local environments
+.env
+.venv/
+venv/
+synthetix/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Model artifacts and checkpoints
+checkpoints/
+models/
+weights/
+artifacts/
+*.pt
+*.pth
+*.bin
+*.ckpt
+*.safetensors
+*.onnx
+
+# Hugging Face and cache directories
+.cache/
+huggingface/
