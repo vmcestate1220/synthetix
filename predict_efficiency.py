@@ -95,6 +95,12 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Include synonymous SNPs. By default they are excluded.",
     )
+    parser.add_argument(
+        "--residues",
+        nargs="+",
+        type=int,
+        help="Specific residues (1-based) to scan. If not provided, scans the whole catalytic domain.",
+    )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument(
         "--output",
@@ -117,10 +123,20 @@ def validate_translation(dna_sequence: str, protein_sequence: str) -> None:
         raise ValueError("Back-translation check failed: translated DNA does not match protein.")
 
 
-def iter_domain_snps(dna_sequence: str) -> Iterable[tuple[int, str]]:
-    start_nt = (CATALYTIC_DOMAIN_START_AA - 1) * 3
-    end_nt = CATALYTIC_DOMAIN_END_AA * 3
-    for index in range(start_nt, end_nt):
+def iter_domain_snps(dna_sequence: str, residue_list: list[int] | None = None) -> Iterable[tuple[int, str]]:
+    if residue_list:
+        indices_to_scan = []
+        for residue in residue_list:
+            start_nt = (residue - 1) * 3
+            indices_to_scan.extend([start_nt, start_nt + 1, start_nt + 2])
+    else:
+        start_nt = (CATALYTIC_DOMAIN_START_AA - 1) * 3
+        end_nt = CATALYTIC_DOMAIN_END_AA * 3
+        indices_to_scan = range(start_nt, end_nt)
+
+    for index in indices_to_scan:
+        if index < 0 or index >= len(dna_sequence):
+            continue
         ref_nt = dna_sequence[index]
         for alt_nt in DNA_ALPHABET:
             if alt_nt != ref_nt:
@@ -132,9 +148,10 @@ def build_variant_records(
     protein_sequence: str,
     max_variants: int | None,
     include_synonymous: bool,
+    residue_list: list[int] | None = None,
 ) -> list[dict[str, object]]:
     variants: list[dict[str, object]] = []
-    for dna_index, alt_nt in iter_domain_snps(dna_sequence):
+    for dna_index, alt_nt in iter_domain_snps(dna_sequence, residue_list=residue_list):
         mutated = list(dna_sequence)
         mutated[dna_index] = alt_nt
         mutated_sequence = "".join(mutated)
@@ -300,12 +317,14 @@ def score_variants(
     max_variants: int | None,
     include_synonymous: bool,
     output_path: Path,
+    residue_list: list[int] | None = None,
 ) -> tuple[list[VariantScore], int]:
     variants = build_variant_records(
         dna_sequence=dna_sequence,
         protein_sequence=protein_sequence,
         max_variants=max_variants,
         include_synonymous=include_synonymous,
+        residue_list=residue_list,
     )
     existing_scores = [
         score
@@ -402,14 +421,17 @@ def main() -> int:
         max_variants=args.max_variants,
         include_synonymous=args.include_synonymous,
         output_path=args.output,
+        residue_list=args.residues,
     )
     ranked_scores, pending_count = scores
     write_csv(args.output, ranked_scores)
 
-    print(
-        f"Scored {len(ranked_scores)} SNPs across GS2 catalytic-domain residues "
-        f"{CATALYTIC_DOMAIN_START_AA}-{CATALYTIC_DOMAIN_END_AA}."
+    domain_label = (
+        f"residues {args.residues}"
+        if args.residues
+        else f"GS2 catalytic-domain residues {CATALYTIC_DOMAIN_START_AA}-{CATALYTIC_DOMAIN_END_AA}"
     )
+    print(f"Scored {len(ranked_scores)} SNPs across {domain_label}.")
     print(f"New variants evaluated in this run: {pending_count}")
     print(f"Ranked variants written to {args.output}")
     for score in ranked_scores[: args.top_k]:
