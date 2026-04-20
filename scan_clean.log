@@ -1,0 +1,70 @@
+Scoring Variants:   0%|          | 0/7 [00:00<?, ?it/s]Scoring Variants:  14%|█▍        | 1/7 [06:02<36:13, 362.28s/it]Scoring Variants:  29%|██▊       | 2/7 [12:05<30:14, 362.85s/it]Scoring Variants:  43%|████▎     | 3/7 [18:03<24:02, 360.71s/it]Scoring Variants:  43%|████▎     | 3/7 [22:24<29:52, 448.15s/it]
+Traceback (most recent call last):
+  File "/Users/laptop-h9y2/projects/science/synthetix/predict_efficiency.py", line 449, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/Users/laptop-h9y2/projects/science/synthetix/predict_efficiency.py", line 417, in main
+    scores = score_variants(
+             ^^^^^^^^^^^^^^^
+  File "/Users/laptop-h9y2/projects/science/synthetix/predict_efficiency.py", line 356, in score_variants
+    mutant_response = client.generate(str(variant["sequence"]))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/laptop-h9y2/projects/science/synthetix/predict_efficiency.py", line 283, in generate
+    response.raise_for_status()
+  File "/Users/laptop-h9y2/projects/science/synthetix/synthetix/lib/python3.11/site-packages/requests/models.py", line 1028, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 502 Server Error: Bad Gateway for url: https://health.api.nvidia.com/v1/biology/arc/evo2-40b/generate
+Scoring Variants:   0%|          | 0/4 [00:00<?, ?it/s]Scoring Variants:  25%|██▌       | 1/4 [06:36<19:50, 396.74s/it]Scoring Variants:  50%|█████     | 2/4 [12:37<12:31, 375.64s/it]Scoring Variants:  75%|███████▌  | 3/4 [18:39<06:09, 369.38s/it]Scoring Variants: 100%|██████████| 4/4 [20:10<00:00, 259.49s/it]Scoring Variants: 100%|██████████| 4/4 [20:10<00:00, 302.65s/it]
+Scored 74 SNPs across residues [124, 125, 127, 138, 151, 158, 170, 173, 180, 187].
+New variants evaluated in this run: 26
+Ranked variants written to gs2_active_site_scan.csv
+  1  nt 509:A>C  aa 170:E>A  missense    delta=0.0644  p=0.625391  next=T
+  2  nt 373:G>A  aa 125:D>N  missense    delta=0.0563  p=0.620366  next=T
+  3  nt 472:G>A  aa 158:E>K  missense    delta=0.0477  p=0.615026  next=T
+  4  nt 559:G>A  aa 187:E>K  missense    delta=0.0427  p=0.611968  next=T
+  5  nt 559:G>C  aa 187:E>Q  missense    delta=0.0289  p=0.603578  next=T
+  6  nt 374:A>T  aa 125:D>V  missense    delta=0.0285  p=0.603369  next=T
+  7  nt 380:A>C  aa 127:E>A  missense    delta=0.0277  p=0.602860  next=T
+  8  nt 370:G>C  aa 124:E>Q  missense    delta=0.0273  p=0.602601  next=T
+  9  nt 519:C>A  aa 173:S>R  missense    delta=0.0270  p=0.602440  next=T
+ 10  nt 372:A>C  aa 124:E>D  missense    delta=0.0249  p=0.601165  next=T
+ 11  nt 508:G>A  aa 170:E>K  missense    delta=0.0245  p=0.600948  next=T
+ 12  nt 379:G>A  aa 127:E>K  missense    delta=0.0195  p=0.597912  next=T
+ 13  nt 370:G>A  aa 124:E>K  missense    delta=0.0187  p=0.597474  next=T
+ 14  nt 539:A>G  aa 180:E>G  missense    delta=0.0153  p=0.595407  next=T
+ 15  nt 380:A>G  aa 127:E>G  missense    delta=0.0138  p=0.594509  next=T
+ 16  nt 517:A>C  aa 173:S>R  missense    delta=0.0133  p=0.594266  next=T
+ 17  nt 412:G>C  aa 138:D>H  missense    delta=0.0132  p=0.594171  next=T
+ 18  nt 373:G>C  aa 125:D>H  missense    delta=0.0129  p=0.593979  next=T
+ 19  nt 517:A>T  aa 173:S>C  missense    delta=0.0111  p=0.592959  next=T
+ 20  nt 375:T>G  aa 125:D>E  missense    delta=0.0069  p=0.590477  next=T
+ 21  nt 412:G>A  aa 138:D>N  missense    delta=0.0056  p=0.589688  next=T
+ 22  nt 371:A>T  aa 124:E>V  missense    delta=0.0025  p=0.587865  next=T
+ 23  nt 371:A>C  aa 124:E>A  missense    delta=0.0019  p=0.587516  next=T
+ 24  nt 509:A>G  aa 170:E>G  missense    delta=-0.0003  p=0.586193  next=T
+ 25  nt 539:A>C  aa 180:E>A  missense    delta=-0.0005  p=0.586109  next=T
+ 26  nt 473:A>C  aa 158:E>A  missense    delta=-0.0012  p=0.585665  next=T
+ 27  nt 540:A>C  aa 180:E>D  missense    delta=-0.0017  p=0.585402  next=T
+ 28  nt 452:A>G  aa 151:D>G  missense    delta=-0.0026  p=0.584893  next=T
+ 29  nt 518:G>C  aa 173:S>T  missense    delta=-0.0042  p=0.583913  next=T
+ 30  nt 452:A>C  aa 151:D>A  missense    delta=-0.0048  p=0.583593  next=T
+ 31  nt 538:G>C  aa 180:E>Q  missense    delta=-0.0065  p=0.582596  next=T
+ 32  nt 519:C>G  aa 173:S>R  missense    delta=-0.0094  p=0.580919  next=T
+ 33  nt 473:A>T  aa 158:E>V  missense    delta=-0.0116  p=0.579622  next=T
+ 34  nt 510:A>C  aa 170:E>D  missense    delta=-0.0122  p=0.579297  next=T
+ 35  nt 372:A>T  aa 124:E>D  missense    delta=-0.0138  p=0.578368  next=T
+ 36  nt 380:A>T  aa 127:E>V  missense    delta=-0.0165  p=0.576785  next=T
+ 37  nt 473:A>G  aa 158:E>G  missense    delta=-0.0174  p=0.576255  next=T
+ 38  nt 474:A>C  aa 158:E>D  missense    delta=-0.0178  p=0.576045  next=T
+ 39  nt 561:A>T  aa 187:E>D  missense    delta=-0.0181  p=0.575844  next=T
+ 40  nt 508:G>C  aa 170:E>Q  missense    delta=-0.0185  p=0.575668  next=T
+ 41  nt 539:A>T  aa 180:E>V  missense    delta=-0.0193  p=0.575207  next=T
+ 42  nt 414:T>A  aa 138:D>E  missense    delta=-0.0206  p=0.574454  next=T
+ 43  nt 518:G>T  aa 173:S>I  missense    delta=-0.0206  p=0.574452  next=T
+ 44  nt 540:A>T  aa 180:E>D  missense    delta=-0.0222  p=0.573488  next=T
+ 45  nt 453:T>A  aa 151:D>E  missense    delta=-0.0226  p=0.573292  next=T
+ 46  nt 381:A>C  aa 127:E>D  missense    delta=-0.0226  p=0.573279  next=T
+ 47  nt 518:G>A  aa 173:S>N  missense    delta=-0.0246  p=0.572147  next=T
+ 48  nt 413:A>C  aa 138:D>A  missense    delta=-0.0255  p=0.571631  next=T
+ 49  nt 452:A>T  aa 151:D>V  missense    delta=-0.0270  p=0.570778  next=T
+ 50  nt 474:A>T  aa 158:E>D  missense    delta=-0.0270  p=0.570753  next=T

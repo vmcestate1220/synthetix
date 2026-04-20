@@ -71,7 +71,10 @@ def draw_heatmap(heatmap: pd.DataFrame, wildtype: pd.DataFrame, output_path: Pat
     )
 
     x_positions = list(range(len(heatmap.columns)))
-    tick_labels = [str(pos) if pos % 10 == 0 else "" for pos in heatmap.columns]
+    if len(heatmap.columns) < 20:
+        tick_labels = [str(pos) for pos in heatmap.columns]
+    else:
+        tick_labels = [str(pos) if pos % 10 == 0 else "" for pos in heatmap.columns]
     ax.set_xticks([x + 0.5 for x in x_positions])
     ax.set_xticklabels(tick_labels, rotation=0)
     ax.set_xlabel("GS2 Residue Position")

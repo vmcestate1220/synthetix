@@ -20,6 +20,7 @@ from typing import Iterable
 
 import requests
 from Bio.Seq import Seq
+from tqdm import tqdm
 
 WILD_TYPE_PROTEIN = (
     "MAQILAASPTCQMRVPKHSSVIASSSKLWSSVVLKQKKQSNNKVRGFRVLALQSDNSTVNRVETLL"
@@ -267,23 +268,32 @@ class Evo2GenerateClient:
         payload = self.build_payload(sequence)
         if self.dry_run:
             print(json.dumps(payload, indent=2))
-            raise SystemExit(0)
+            return {}
 
-        response = requests.post(
-            self.api_url,
-            headers={
-                "Authorization": f"Bearer {self.api_key}",
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-            },
-            json=payload,
-            timeout=self.timeout,
-        )
-        response.raise_for_status()
-        data = response.json()
-        if "sequence" not in data:
-            raise ValueError(f"Generate response missing 'sequence': {data}")
-        return data
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                response = requests.post(
+                    self.api_url,
+                    headers={
+                        "Authorization": f"Bearer {self.api_key}",
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    json=payload,
+                    timeout=self.timeout,
+                )
+                response.raise_for_status()
+                data = response.json()
+                if "sequence" not in data:
+                    raise ValueError(f"Generate response missing 'sequence': {data}")
+                return data
+            except (requests.exceptions.HTTPError, requests.exceptions.ConnectionError) as exc:
+                if attempt == max_retries - 1:
+                    raise
+                import time
+                time.sleep(2 ** attempt)
+        return {}
 
 
 def parse_generate_score(prompt_sequence: str, response: dict[str, object]) -> dict[str, object]:
@@ -349,7 +359,7 @@ def score_variants(
         wildtype_log_likelihood = float(wildtype_score["continuation_log_likelihood"])
 
     new_results: list[VariantScore] = []
-    for batch in chunked(pending_variants, batch_size):
+    for batch in tqdm(chunked(pending_variants, batch_size), total=(len(pending_variants) + batch_size - 1) // batch_size, desc="Scoring Variants"):
         batch_results: list[VariantScore] = []
         for variant in batch:
             mutant_response = client.generate(str(variant["sequence"]))
