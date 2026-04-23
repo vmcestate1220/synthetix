@@ -40,3 +40,6 @@ artifacts/
 # Hugging Face and cache directories
 .cache/
 huggingface/
+
+# Docking outputs (regenerable from Vina)
+*_out.pdbqt
