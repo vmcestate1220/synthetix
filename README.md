@@ -6,7 +6,7 @@
 [![Seaborn](https://img.shields.io/badge/Seaborn-plots-9cf.svg)](https://seaborn.pydata.org/)
 [![Matplotlib](https://img.shields.io/badge/Matplotlib-visualization-11557c.svg)](https://matplotlib.org/)
 [![VPython](https://img.shields.io/badge/VPython-3D-orange.svg)](https://vpython.org/)
-[![License](https://img.shields.io/badge/license-TBD-lightgrey.svg)](#license)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](#license)
 [![Status](https://img.shields.io/badge/status-active%20research-success.svg)](#)
 
 ---
@@ -26,23 +26,36 @@
 
 ## Overview
 
-Synthetix is a genomic analysis toolset for ranking and visualizing the effects of Single Nucleotide Polymorphisms (SNPs) within the catalytic domain of chloroplastic **Glutamine Synthetase 2 (GS2)**.
+Synthetix is a research pipeline for ranking and visualizing the functional impact of Single Nucleotide Polymorphisms (SNPs) within the catalytic domain of chloroplastic **Glutamine Synthetase 2 (GS2)** from *Arabidopsis thaliana* (UniProt **Q43127**). Its goal is to identify non-synonymous substitutions that may plausibly **improve catalytic efficiency, substrate affinity, or fold stability** — and to narrow a combinatorially large mutation landscape down to a prioritized shortlist of candidates for structural audit and wet-lab validation.
 
-Using the **NVIDIA Evo 2 40B** genomic foundation model, Synthetix predicts the evolutionary fitness and enzymatic efficiency impact of missense mutations by calculating continuation log-likelihoods.
+GS2 catalyzes the ATP-dependent condensation of glutamate and ammonia into glutamine, the entry point for nitrogen assimilation in plant chloroplasts. Even small improvements in its catalytic throughput have implications for **nitrogen-use efficiency** in crops, and the enzyme's active site is densely constrained by metal-binding, substrate-anchoring, and transition-state residues — making it a rigorous testbed for computational variant-effect prediction.
 
-### Scientific Context
+### Role of Evo 2
 
-The catalytic domain of GS2 (residues 111–430) is responsible for nitrogen assimilation in plants. Synthetix targets key functional residues including:
+Synthetix uses **NVIDIA Evo 2 40B** — an autoregressive genomic foundation model trained on ~9.3 trillion nucleotides spanning all domains of life — as the scoring engine behind its variant predictions. Evo 2 models DNA directly at single-nucleotide resolution, which lets Synthetix evaluate SNPs *in their native codon and genomic context* rather than after translation to protein. This preserves signals (codon usage bias, local sequence composition, mutational neighborhood) that are lost in protein-only language models.
 
-- **Metal Binding:** Glu-124, Asp-125, Asp-151
-- **Substrate Affinity:** Ser-173
-- **Catalytic Core:** Glu-187
+Concretely, the pipeline:
+
+1. Back-translates the wild-type GS2 protein into a DNA sequence using *Arabidopsis*-preferred codons.
+2. Generates each candidate single-nucleotide variant across the catalytic domain (residues 111–430).
+3. Prompts Evo 2 with the sequence context preceding the variant position and reads out the model's **continuation log-likelihood** for the reference vs. alternate base.
+4. Ranks variants by the **delta log-likelihood** (Δ-LL) relative to wild type: positive Δ-LL ≈ the variant fits the evolutionary/functional prior learned by Evo 2 better than the WT base; negative Δ-LL ≈ the opposite.
+
+Because inference runs against the hosted NVIDIA API, no local GPU is required, and the full catalytic-domain scan is reproducible from a single command.
+
+### Project Aims
+
+1. **Variant discovery.** Produce a ranked, reproducible list of catalytic-domain SNPs most likely to modulate GS2 function.
+2. **Active-site focus.** Targeted scans over functionally critical residues — metal-binding (Glu-124, Asp-125, Asp-151), substrate affinity (Ser-173), and the catalytic core (Glu-187) — to triage leads in the regions where fitness effects are most interpretable.
+3. **Structural validation.** Generate mutant PDB models (e.g., `gs2_model_D125N.pdb`) and run docking audits against ATP and glutamate to cross-check the sequence-level predictions with geometry-level plausibility.
+4. **Communicable results.** Deliver publication-quality heatmaps and 3D visualizations so that leads can be inspected, compared, and handed off for experimental follow-up.
 
 ### Tech Stack
 
-- **Model:** NVIDIA Evo 2 40B (Genomic Foundation Model)
+- **Model:** NVIDIA Evo 2 40B (hosted genomic foundation model)
 - **Language:** Python 3.11
 - **Libraries:** Biopython, Pandas, Seaborn, Matplotlib, VPython, Requests
+- **Docking:** AutoDock Vina with `.pdbqt`-converted receptor and ligand inputs
 
 ---
 
@@ -198,4 +211,4 @@ Maintainer of the Synthetix pipeline.
 
 ### License
 
-*Specify license here (e.g., MIT, Apache 2.0)*
+Released under the **MIT License**. See [`LICENSE`](LICENSE) for the full text.
