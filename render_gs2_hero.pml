@@ -9,7 +9,7 @@ set ambient, 0.3
 set specular, 0.15
 set ray_trace_mode, 1
 set ray_trace_color, black
-set ray_opaque_background, 1
+set ray_opaque_background, 0
 set antialias, 2
 
 color 0xFF7D45, gs2
