@@ -1,8 +1,10 @@
 load AF-Q43127-F1.pdb, gs2
 
+select cat_domain, resi 111-430
+
 bg_color white
 hide everything
-show cartoon, gs2
+show cartoon, cat_domain
 set cartoon_transparency, 0.0
 set ray_shadows, 0
 set ambient, 0.3
@@ -17,8 +19,8 @@ color 0xFFDB13, gs2 and b > 50
 color 0x65CBF3, gs2 and b > 70
 color 0x0053D6, gs2 and b > 90
 
-orient gs2
-zoom gs2, 3
+orient cat_domain
+zoom cat_domain, 3
 
 ray 1600, 1000
 png GS2_AlphaFold_Structure.png, dpi=200
