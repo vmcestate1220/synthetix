@@ -1,8 +1,7 @@
 <p align="center">
   <img src="GS2_AlphaFold_Structure.png" alt="AlphaFold structure of chloroplastic Glutamine Synthetase 2 (GS2) from Arabidopsis thaliana (UniProt Q43127), colored by pLDDT" width="720"/>
   <br/>
-  <sub><em>AlphaFold structure of the GS2 catalytic domain (residues 111–430; <a href="https://alphafold.ebi.ac.uk/entry/Q43127">UniProt Q43127</a>).</em></sub><br/>
-  <sub><em>Colored by pLDDT: dark blue ≥90, light blue 70–90.</em></sub>
+  <sub><em>AlphaFold structure of the GS2 catalytic domain (residues 111–430; <a href="https://alphafold.ebi.ac.uk/entry/Q43127">UniProt Q43127</a>).</em></sub>
 </p>
 
 # Synthetix: GS2 Catalytic-Domain Variant Analysis Pipeline
