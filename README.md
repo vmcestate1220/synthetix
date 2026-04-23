@@ -1,3 +1,11 @@
+<p align="center">
+  <img src="GS2_AlphaFold_Structure.png" alt="AlphaFold structure of chloroplastic Glutamine Synthetase 2 (GS2) from Arabidopsis thaliana (UniProt Q43127), colored by pLDDT" width="720"/>
+</p>
+
+<p align="center">
+  <em>AlphaFold structure of chloroplastic GS2 (<a href="https://alphafold.ebi.ac.uk/entry/Q43127">UniProt Q43127</a>) — colored by pLDDT.</em>
+</p>
+
 # Synthetix: GS2 Catalytic-Domain Variant Analysis Pipeline
 
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3110/)
