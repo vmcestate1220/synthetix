@@ -1,3 +1,31 @@
+# AutoDock Vina configuration for GS2 + glutamate docking.
+#
+# Box provenance
+# --------------
+# Center is the bounding-box centroid of residue 125 (Asp-125, the metal-
+# binding aspartate identified by Eisenberg et al. 2000 as a structural
+# anchor for divalent cations that position the glutamate substrate).
+# A 20 Å cube is a conservative bound for a 146 Da ligand (glutamate,
+# ~10 heavy atoms) and leaves enough slack that the ligand can explore
+# the full C-site pocket without clipping outside.
+#
+# Reproduce:
+#
+#   python3 derive_docking_box.py \
+#       --pdb AF-Q43127-F1.pdb --chain A \
+#       --residues 125 --padding 0 --min-size 20 \
+#       --receptor WT_ready.pdbqt --ligand Glutamate.pdbqt
+#
+# (The committed center below was derived from WT_ready.pdb, the PDBFixer-
+# protonated form of AF-Q43127-F1.pdb, which shifts coordinates by
+# ~0.5–1.0 Å relative to the raw AlphaFold model. Re-deriving from the
+# raw AlphaFold as above gives center ≈ (18.99, -15.47, 17.09) — within
+# structural-prep noise of the committed numbers.)
+#
+# For ATP docking, use a different box centered on the N-site (ATP-
+# binding pocket). In Arabidopsis GS2 that pocket is organized around
+# Gly-251 and Arg-354; run derive_docking_box.py with those residues.
+
 receptor = WT_ready.pdbqt
 ligand = Glutamate.pdbqt
 
