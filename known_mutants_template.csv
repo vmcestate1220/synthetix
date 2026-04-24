@@ -1,0 +1,29 @@
+mutation,measured_effect,effect_type,citation,notes
+# Schema for validate_against_kinetics.py. Populate with GS2 mutants that
+# have measured functional data. One row per distinct AA change using the
+# Arabidopsis GS2 (UniProt Q43127) numbering the Synthetix scan uses.
+#
+# `measured_effect` must be a single float on a consistent convention.
+# Suggested: `log2_relative_kcat_over_km` or `log2_relative_kcat`, where
+# HIGHER = MORE FAVORABLE (WT = 0).
+#
+# The literature has very little direct Arabidopsis GS2 mutagenesis data.
+# Most usable rows will come from homolog mapping: take a mutation from
+# E. coli GlnA, Phaseolus GS1, or GLN1;3 with published kinetic data, run
+# align_to_gs2.py to map its residue number onto GS2, and verify the
+# local alignment identity before adding. See docs/known_mutants_literature.md
+# for the source catalog.
+#
+# Example workflow (remove these comments once populated):
+#
+#   python3 align_to_gs2.py \
+#       --source EcoliGlnA.fasta \
+#       --source-label EcoliGS \
+#       --mutations D50A E327A \
+#       --measured-effects -2.1 -3.4 \
+#       --effect-type log2_relative_kcat_over_km_NH4 \
+#       --citation "Alibhai & Villafranca 1994 Biochemistry 33 682" \
+#       --out-csv known_mutants.csv
+#
+# Minimum rows for a meaningful correlation:  5 (validate_against_kinetics.py
+# --min-observations default). Recommended: 10+.
